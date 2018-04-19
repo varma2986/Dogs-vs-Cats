@@ -10,8 +10,10 @@ from models.cnn_2conv import create_cnn_2conv_model
 from models.cnn_2conv_fc2 import create_cnn_2conv_fc2_model
 from models.cnn_3conv_fc1 import create_cnn_3conv_fc1_model
 from models.cnn_3conv_fc2 import create_cnn_3conv_fc2_model
+from models.cnn_3conv_fc3_new import create_cnn_3conv_fc3_model
 from models.cnn_3conv_fc2_sigmoid import create_cnn_3conv_fc2_sigmoid_model
 from models.cnn_3conv_fc1_l2reg import create_cnn_3conv_fc1_l2reg_model
+from models.cnn_vgg16 import create_cnn_vgg16_model
 from random import shuffle
 
 np.random.seed(1337)
@@ -20,8 +22,8 @@ np.random.seed(1337)
 224 * 224 for GoogleNet
 64 * 64 for initial testing
 """
-WIDTH = 64
-HEIGHT = 64
+WIDTH = 224
+HEIGHT = 224
 
 
 def create_logger():
@@ -66,26 +68,100 @@ def shuffle_in_unison(a, b):
     return shuffled_a, shuffled_b
 
 def create_train_test_data(WIDTH, HEIGHT):
-    cat_files = glob.glob("data/train/cat*")
-    dog_files = glob.glob("data/train/dog*")
-    
-    shuffle(cat_files)
-    shuffle(dog_files)
-    # Restrict cat and dog files here for testing
-    cat_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat_files]
-    dog_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog_files]
 
+    #1. Pick images with cat.1* and dog.1*
+    #cat1_files = glob.glob("data/train/cat.1*")
+    #dog1_files = glob.glob("data/train/dog.1*")
+    
+    # Restrict cat and dog files here for testing
+    #cat1_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat1_files]
+    #dog1_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog1_files]
+
+    #2. Pick images with cat.2* and dog.2*
+    cat2_files = glob.glob("data/train/cat.2*")
+    dog2_files = glob.glob("data/train/dog.2*")
+    
+    # Restrict cat and dog files here for testing
+    cat2_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat2_files]
+    dog2_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog2_files]
+
+    #3. Pick images with cat.3* and dog.3*
+    #cat3_files = glob.glob("data/train/cat.3*")
+    #dog3_files = glob.glob("data/train/dog.3*")
+    
+    # Restrict cat and dog files here for testing
+    #cat3_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat3_files]
+    #dog3_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog3_files]
+   
+    #4. Pick images with cat.4* and dog.4*
+    #cat4_files = glob.glob("data/train/cat.4*")
+    #dog4_files = glob.glob("data/train/dog.4*")
+    
+    # Restrict cat and dog files here for testing
+    #cat4_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat4_files]
+    #dog4_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog4_files]
+   
+
+    #5. Pick images with cat.5* and dog.5*
+    #cat5_files = glob.glob("data/train/cat.5*")
+    #dog5_files = glob.glob("data/train/dog.5*")
+    
+    # Restrict cat and dog files here for testing
+    #cat5_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat5_files]
+    #dog5_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog5_files]
+   
+
+    #6. Pick images with cat.6* and dog.6*
+    #cat6_files = glob.glob("data/train/cat.6*")
+    #dog6_files = glob.glob("data/train/dog.6*")
+    
+    # Restrict cat and dog files here for testing
+    #cat6_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat6_files]
+    #dog6_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog6_files]
+   
+
+    #7. Pick images with cat.7* and dog.7*
+    #cat7_files = glob.glob("data/train/cat.7*")
+    #dog7_files = glob.glob("data/train/dog.7*")
+    
+    # Restrict cat and dog files here for testing
+    #cat7_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat7_files]
+    #dog7_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog7_files]
+   
+
+    #8. Pick images with cat.8* and dog.8*
+    #cat8_files = glob.glob("data/train/cat.8*")
+    #dog8_files = glob.glob("data/train/dog.8*")
+    
+    # Restrict cat and dog files here for testing
+    #cat8_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat8_files]
+    #dog8_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog8_files]
+   
+
+    #9. Pick images with cat.9* and dog.9*
+    #cat9_files = glob.glob("data/train/cat.9*")
+    #dog9_files = glob.glob("data/train/dog.9*")
+    
+    # Restrict cat and dog files here for testing
+    #cat9_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in cat9_files]
+    #dog9_list = [convert_image_to_data(i, WIDTH, HEIGHT) for i in dog9_files]
+   
+    cat_list = cat2_list
+    dog_list = dog2_list
+
+    #cat_list = cat1_list + cat2_list + cat3_list + cat4_list + cat5_list + cat6_list + cat7_list + cat8_list + cat9_list
+    #dog_list = dog1_list + dog2_list + dog3_list + dog4_list + dog5_list + dog6_list + dog7_list + dog8_list + dog9_list
+    
     y_cat = np.zeros(len(cat_list),dtype=int)
     y_dog = np.ones(len(dog_list),dtype=int)
 
     X = np.concatenate([cat_list, dog_list])
-    #X = np.concatenate([cat_list, dog_list])
-    y = np.concatenate([y_cat, y_dog])
+    Y = np.concatenate([y_cat, y_dog])
 
-    X,y = shuffle_in_unison(X,y)
+    X,Y = shuffle_in_unison(X,Y)
 
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.1, random_state=1, stratify=y)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=1, stratify=Y)
     
     return X_train, X_test, Y_train, Y_test
 
@@ -116,7 +192,7 @@ def random_mini_batches(X, Y, mini_batch_size = 64, seed = 0):
     shuffled_Y = Y[permutation,:]
 
     # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.
-    num_complete_minibatches = math.floor(m/mini_batch_size) # number of mini batches of size mini_batch_size in your partitionning
+    num_complete_minibatches = int(math.floor(m/mini_batch_size)) # number of mini batches of size mini_batch_size in your partitionning
     for k in range(0, num_complete_minibatches):
         mini_batch_X = shuffled_X[k * mini_batch_size : k * mini_batch_size + mini_batch_size,:,:,:]
         mini_batch_Y = shuffled_Y[k * mini_batch_size : k * mini_batch_size + mini_batch_size,:]
@@ -160,14 +236,16 @@ if __name__ == "__main__":
     (m, n_H0, n_W0, n_C0) = X_train.shape             
     n_y = Y_train.shape[1]                            
     costs = []                                        # To keep track of the cost
-    minibatch_size = 25
-    num_epochs = 1000
+    minibatch_size = 64
+    num_epochs = 10
     
 
     #optimizer,cost,X,Y,Z = create_cnn_2conv_model(n_H0,n_W0,n_C0,n_y)
-    optimizer,cost,X,Y,Z = create_cnn_2conv_fc2_model(n_H0,n_W0,n_C0,n_y)
+    #optimizer,cost,X,Y,Z = create_cnn_2conv_fc2_model(n_H0,n_W0,n_C0,n_y)
     #optimizer,cost,X,Y,Z = create_cnn_3conv_fc1_model(n_H0,n_W0,n_C0,n_y)
     #optimizer,cost,X,Y,Z = create_cnn_3conv_fc2_model(n_H0,n_W0,n_C0,n_y)
+    #optimizer,cost,X,Y,Z = create_cnn_3conv_fc3_model(n_H0,n_W0,n_C0,n_y)
+    optimizer,cost,X,Y,Z = create_cnn_vgg16_model(n_H0,n_W0,n_C0,n_y)
     #optimizer,cost,X,Y,Z = create_cnn_3conv_fc2_sigmoid_model(n_H0,n_W0,n_C0,n_y)
     #optimizer,cost,X,Y,Z = create_cnn_3conv_fc1_l2reg_model(n_H0,n_W0,n_C0,n_y)
 
@@ -200,7 +278,7 @@ if __name__ == "__main__":
                 
 
             # Print the cost every epoch
-            print ("Cost after epoch %i: %f" % (epoch, minibatch_cost))
+            #print ("Cost after epoch %i: %f" % (epoch, minibatch_cost))
             if epoch % 5 == 0:
                 print ("Cost after epoch %i: %f" % (epoch, minibatch_cost))
             if epoch % 1 == 0:
